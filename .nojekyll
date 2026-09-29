@@ -1,1 +1,1 @@
-# Disable Jekyll processing for Flutter web assets on GitHub Pages
+# Prevent GitHub Pages from ignoring hidden files or Flutter WebAssembly modules

@@ -8,7 +8,7 @@
 
   [![Flutter Web](https://img.shields.io/badge/Flutter-Web%203.47.2-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
   [![PWA Ready](https://img.shields.io/badge/PWA-Ready-4F46E5?logo=pwa&logoColor=white)](https://web.dev/progressive-web-apps/)
-  [![Version](https://img.shields.io/badge/Version-1.0.4-10B981)](#)
+  [![Version](https://img.shields.io/badge/Version-1.0.5-10B981)](#)
   [![Platform](https://img.shields.io/badge/Platform-iOS%20%7C%20Android%20%7C%20Web-blue)](#)
 
   <p align="center">
