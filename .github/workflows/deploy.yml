@@ -12,8 +12,6 @@ permissions:
   pages: write
   id-token: write
 
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
   group: "pages"
   cancel-in-progress: false
@@ -28,21 +26,31 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Inspect Workspace Directory
+        run: |
+          echo "Current directory: $(pwd)"
+          ls -la
+
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
           flutter-version: '3.47.2'
-          cache: true
 
       - name: Get Dependencies
         run: flutter pub get
+
+      - name: Create .env (required asset)
+        run: echo "NEON_DATABASE_URL=${{ secrets.NEON_DATABASE_URL }}" > .env
 
       - name: Build Flutter Web
         run: |
           flutter build web --release \
             --base-href /${{ github.event.repository.name }}/ \
             --dart-define=NEON_DATABASE_URL="${{ secrets.NEON_DATABASE_URL }}"
+
+      - name: Sync SPA 404 fallback with built index.html
+        run: cp build/web/index.html build/web/404.html
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

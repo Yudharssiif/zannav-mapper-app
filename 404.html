@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <base href="$FLUTTER_BASE_HREF">
+  <base href="/">
   <script>
     // GitHub Pages & Subfolder Dynamic Base HREF Fallback
     // Automatically detects GitHub Pages subpath (e.g. /zannav-mapper-app/) if base href wasn't pre-set
@@ -40,8 +40,8 @@
   <meta property="og:image" content="og.png">
 
   <!-- Theme Color -->
-  <meta name="theme-color" content="#4F46E5">
-  <meta name="msapplication-navbutton-color" content="#4F46E5">
+  <meta name="theme-color" content="#014889">
+  <meta name="msapplication-navbutton-color" content="#014889">
 
   <!-- Favicons -->
   <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -86,7 +86,7 @@
       width: 80px;
       height: 80px;
       border-radius: 20px;
-      box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.4);
+      box-shadow: 0 10px 25px -5px rgba(1, 72, 137, 0.55);
       margin-bottom: 20px;
       animation: pulse 2s infinite ease-in-out;
     }
@@ -112,7 +112,7 @@
       height: 36px;
       border: 3px solid rgba(255, 255, 255, 0.1);
       border-radius: 50%;
-      border-top-color: #4F46E5;
+      border-top-color: #00A236;
       animation: spin 0.8s linear infinite;
     }
 
@@ -163,6 +163,10 @@
   </div>
 
   <script>
+    // Flutter web needs an HTTP origin: opening index.html directly (file://)
+    // makes the browser block FontManifest/manifest/service-worker with CORS.
+    var isFileProtocol = window.location.protocol === 'file:';
+
     // Show troubleshooting option if loading takes more than 10 seconds
     var timer = setTimeout(function() {
       var btn = document.getElementById('troubleshoot-btn');
@@ -170,6 +174,25 @@
       if (btn) btn.style.display = 'inline-block';
       if (status) status.innerText = 'Connecting to transit database...';
     }, 10000);
+
+    if (isFileProtocol) {
+      clearTimeout(timer);
+      var statusEl = document.getElementById('loading-status');
+      var btnEl = document.getElementById('troubleshoot-btn');
+      var spinnerEl = document.querySelector('.spinner-ring');
+      if (spinnerEl) spinnerEl.style.display = 'none';
+      if (statusEl) {
+        statusEl.style.lineHeight = '1.6';
+        statusEl.innerHTML = 'This page was opened as a local file, which browsers block.<br>' +
+          'Serve this folder over HTTP instead:<br>' +
+          '<span style="color:#CBD5E1">flutter run -d web-server --release</span>';
+      }
+      if (btnEl) {
+        btnEl.style.display = 'inline-block';
+        btnEl.innerText = 'Open http://localhost:8080 once served';
+        btnEl.onclick = function () { window.open('http://localhost:8080', '_blank'); };
+      }
+    }
 
     function clearCacheAndReload() {
       if ('serviceWorker' in navigator) {
